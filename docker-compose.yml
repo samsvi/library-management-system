@@ -1,0 +1,26 @@
+services:
+  db:
+    image: postgres:15
+    container_name: library-db
+    environment:
+      POSTGRES_DB: library
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  app:
+    build: .
+    container_name: library-app
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+    command: ["java", "-jar", "app.jar"]
+
+volumes:
+  pgdata:
