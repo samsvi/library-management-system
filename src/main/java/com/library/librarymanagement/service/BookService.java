@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class BookService {
@@ -50,11 +49,6 @@ public class BookService {
         return bookMapper.toDto(savedBook);
     }
 
-    public Optional<BookResponseDto> getBookById(Long id) {
-        return bookRepository.findById(id)
-                .map(bookMapper::toDto);
-    }
-
     public BookResponseDto updateBook(Long id, BookCreateRequestDto requestDto) {
 
         Book book = bookRepository.findById(id)
@@ -68,7 +62,7 @@ public class BookService {
         validateAndUpdateTitle(requestDto.getTitle(), book, errors);
         validateAndUpdateIsbn(requestDto.getIsbn(), book, errors);
         validateAndUpdateAuthor(requestDto.getAuthor(), book, errors);
-        validateAndUpdatePublishedYear(requestDto.getPublishedYear(), book, errors);
+        validateAndUpdatePublishedYear(requestDto.getPublishedYear(), book);
 
         if (!errors.isEmpty()) {
             throw new UpdateValidationException("Validation error", errors);
@@ -126,7 +120,7 @@ public class BookService {
         }
     }
 
-    private void validateAndUpdatePublishedYear(Integer newYear, Book book, List<String> errors) {
+    private void validateAndUpdatePublishedYear(Integer newYear, Book book) {
         if (newYear == null) return;
 
         book.setPublishedYear(newYear);
