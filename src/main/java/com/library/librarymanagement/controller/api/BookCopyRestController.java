@@ -7,6 +7,7 @@ import com.library.librarymanagement.service.BookCopyService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +17,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("api/books")
+@Tag(name = "Book Copies", description = "Endpoints related to book copies")
 public class BookCopyRestController {
 
     private final BookCopyService bookCopyService;
