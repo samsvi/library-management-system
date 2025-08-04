@@ -4,7 +4,6 @@ import com.library.librarymanagement.controller.api.BookCopyRestController;
 import com.library.librarymanagement.dto.response.bookCopy.BookCopyDetailResponseDto;
 import com.library.librarymanagement.dto.response.bookCopy.BookCopyResponseDto;
 import com.library.librarymanagement.service.BookCopyService;
-import com.library.librarymanagement.service.BookService;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
