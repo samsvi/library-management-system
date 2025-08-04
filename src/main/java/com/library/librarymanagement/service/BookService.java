@@ -86,6 +86,16 @@ public class BookService {
         return bookMapper.toDetailDto(book);
     }
 
+    public BookCreateRequestDto getBookEditDto(Long id) {
+        BookDetailResponseDto book = getBook(id);
+        BookCreateRequestDto dto = new BookCreateRequestDto();
+        dto.setTitle(book.getTitle());
+        dto.setAuthor(book.getAuthor());
+        dto.setIsbn(book.getIsbn());
+        dto.setPublishedYear(book.getPublishedYear());
+        return dto;
+    }
+
     private void validateAndUpdateTitle(String newTitle, Book book, List<String> errors) {
         if (newTitle == null) return;
 

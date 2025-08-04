@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{fragments/layout :: layout (~{::div}, 'Book List')}">
+<body>
+<div>
+    <h1>Book List</h1>
+    <a class="btn btn-primary mb-3" href="/books/new">Add Book</a>
+
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th><a th:href="@{|/books?page=0&sort=title&dir=${reverseDir}|}">Title</a></th>
+            <th><a th:href="@{|/books?page=0&sort=author&dir=${reverseDir}|}">Author</a></th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="book : ${bookPage.content}">
+            <td th:text="${book.title}">Title</td>
+            <td th:text="${book.author}">Author</td>
+            <td>
+                <a th:href="@{'/books/' + ${book.id}}" class="btn btn-sm btn-info">View</a>
+                <a th:href="@{'/books/' + ${book.id} + '/edit'}" class="btn btn-sm btn-warning">Edit</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <nav>
+        <ul class="pagination">
+            <li th:classappend="${bookPage.first} ? 'disabled'">
+                <a class="page-link" th:href="@{|/books?page=${currentPage - 1}&sort=${sort}&dir=${dir}|}">Previous</a>
+            </li>
+            <li class="page-item disabled">
+                <span class="page-link" th:text="'Page ' + (${currentPage} + 1) + ' of ' + ${bookPage.totalPages}"></span>
+            </li>
+            <li th:classappend="${bookPage.last} ? 'disabled'">
+                <a class="page-link" th:href="@{|/books?page=${currentPage + 1}&sort=${sort}&dir=${dir}|}">Next</a>
+            </li>
+        </ul>
+    </nav>
+</div>
+</body>
+</html>
