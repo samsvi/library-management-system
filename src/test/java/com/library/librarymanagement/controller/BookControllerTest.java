@@ -13,6 +13,9 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Primary;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -48,12 +51,17 @@ public class BookControllerTest {
         book.setId(1L);
         book.setTitle("Clean Code");
 
-        Mockito.when(bookService.getAllBooks()).thenReturn(List.of(book));
+        Page<BookResponseDto> page = new PageImpl<>(List.of(book));
 
-        mockMvc.perform(get("/api/books"))
+        Mockito.when(bookService.getAllBooks(Mockito.any(Pageable.class)))
+                .thenReturn(page);
+
+        mockMvc.perform(get("/api/books?page=0&size=10"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].id").value(1L))
-                .andExpect(jsonPath("$[0].title").value("Clean Code"));
+                .andExpect(jsonPath("$.content[0].id").value(1L))
+                .andExpect(jsonPath("$.content[0].title").value("Clean Code"))
+                .andExpect(jsonPath("$.totalElements").value(1))
+                .andExpect(jsonPath("$.number").value(0));
     }
 
     @Test

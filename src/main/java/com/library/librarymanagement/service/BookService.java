@@ -9,6 +9,8 @@ import com.library.librarymanagement.exception.UpdateValidationException;
 import com.library.librarymanagement.mapper.BookMapper;
 import com.library.librarymanagement.model.Book;
 import com.library.librarymanagement.repository.BookRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -26,11 +28,9 @@ public class BookService {
         this.bookMapper = bookMapper;
     }
 
-    public List<BookResponseDto> getAllBooks() {
-        return bookRepository.findAll()
-                .stream()
-                .map(bookMapper::toDto)
-                .toList();
+    public Page<BookResponseDto> getAllBooks(Pageable pageable) {
+        return bookRepository.findAll(pageable)
+                .map(bookMapper::toDto);
     }
 
     public BookResponseDto addBook(BookCreateRequestDto requestDto) {

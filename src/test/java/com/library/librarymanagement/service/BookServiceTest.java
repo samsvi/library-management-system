@@ -14,6 +14,10 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 import java.util.Optional;
@@ -37,16 +41,21 @@ public class BookServiceTest {
     void testGetAllBooks_shouldReturnList() {
         Book book = new Book();
         book.setId(1L);
-        Mockito.when(bookRepository.findAll()).thenReturn(List.of(book));
 
         BookResponseDto dto = new BookResponseDto();
         dto.setId(1L);
+
+        Pageable pageable = PageRequest.of(0, 10);
+        Page<Book> bookPage = new PageImpl<>(List.of(book), pageable, 1);
+        Page<BookResponseDto> expectedDtoPage = new PageImpl<>(List.of(dto), pageable, 1);
+
+        Mockito.when(bookRepository.findAll(pageable)).thenReturn(bookPage);
         Mockito.when(bookMapper.toDto(book)).thenReturn(dto);
 
-        List<BookResponseDto> result = bookService.getAllBooks();
+        Page<BookResponseDto> result = bookService.getAllBooks(pageable);
 
-        assertEquals(1, result.size());
-        assertEquals(1L, result.getFirst().getId());
+        assertEquals(1, result.getTotalElements());
+        assertEquals(dto.getId(), result.getContent().getFirst().getId());
     }
 
     @Test
