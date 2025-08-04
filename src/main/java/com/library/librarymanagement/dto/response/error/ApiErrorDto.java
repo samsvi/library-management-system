@@ -1,8 +1,11 @@
 package com.library.librarymanagement.dto.response.error;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
 import java.time.ZonedDateTime;
 import java.util.List;
 
+@Schema(description = "API Error Response DTO")
 public class ApiErrorDto {
 
     private String path;
